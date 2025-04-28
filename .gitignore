@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore .mvn e wrapper nos módulos
+**/mvnw
+**/mvnw.cmd
+**/.mvn/
