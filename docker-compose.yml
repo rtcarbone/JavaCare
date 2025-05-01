@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: javacare-postgres
+    environment:
+      POSTGRES_DB: javacare
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - javacare-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: javacare-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672" # painel de admin
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - javacare-net
+
+  scheduling:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduling
+    container_name: javacare-scheduling
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    networks:
+      - javacare-net
+
+  notification:
+    build:
+      context: .
+      dockerfile: Dockerfile.notification
+    container_name: javacare-notification
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8081:8081"
+    networks:
+      - javacare-net
+
+  history:
+    build:
+      context: .
+      dockerfile: Dockerfile.history
+    container_name: javacare-history
+    depends_on:
+      - postgres
+    ports:
+      - "8082:8082"
+    networks:
+      - javacare-net
+
+volumes:
+  postgres_data:
+
+networks:
+  javacare-net:
+    driver: bridge

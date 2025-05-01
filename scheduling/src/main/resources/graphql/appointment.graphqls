@@ -1,10 +1,16 @@
 type Query {
-    appointmentsByPatient(patientId: ID!): [Appointment]
-    futureAppointmentsByPatient(patientId: ID!): [Appointment]
+    _health: String
 }
 
 type Mutation {
-    createAppointment(input: AppointmentInput!): Appointment
+    createAppointment(input: AppointmentInputDTO!): Appointment
+}
+
+input AppointmentInputDTO {
+    patientId: ID!
+    doctorId: ID!
+    appointmentDateTime: String!
+    status: String!
 }
 
 type Appointment {
@@ -12,18 +18,5 @@ type Appointment {
     patientId: ID!
     doctorId: ID!
     appointmentDateTime: String!
-    status: AppointmentStatus!
-}
-
-input AppointmentInput {
-    patientId: ID!
-    doctorId: ID!
-    appointmentDateTime: String!
-    status: AppointmentStatus!
-}
-
-enum AppointmentStatus {
-    SCHEDULED
-    CANCELLED
-    COMPLETED
+    status: String!
 }

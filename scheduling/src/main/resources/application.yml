@@ -2,8 +2,11 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: scheduling-service
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/javacare
+    url: jdbc:postgresql://postgres:5432/javacare
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -12,16 +15,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
-
-graphql:
-  graphiql:
-    enabled: true
-    path: /graphiql
-    endpoint:
-      graphql: /graphql
