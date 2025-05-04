@@ -1,0 +1,22 @@
+type Query {
+    appointments(
+        patientId: ID
+        doctorId: ID
+        status: AppointmentStatus
+    ): [Appointment]
+    getAppointmentById(id: ID!): Appointment
+}
+
+type Appointment {
+    id: ID!
+    patientId: ID!
+    doctorId: ID!
+    appointmentDateTime: String!
+    status: String!
+}
+
+enum AppointmentStatus {
+    SCHEDULED,
+    CANCELLED,
+    COMPLETED
+}

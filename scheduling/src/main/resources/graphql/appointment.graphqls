@@ -1,9 +1,7 @@
-type Query {
-    _health: String
-}
-
 type Mutation {
-    createAppointment(input: AppointmentInputDTO!): Appointment
+    createAppointment(input: AppointmentInputDTO!): Appointment,
+    updateAppointment(input: AppointmentInputDTO!): Appointment!,
+    cancelAppointment(id: ID!): Appointment
 }
 
 input AppointmentInputDTO {
@@ -19,4 +17,10 @@ type Appointment {
     doctorId: ID!
     appointmentDateTime: String!
     status: String!
+}
+
+enum AppointmentStatus {
+    SCHEDULED,
+    CANCELLED,
+    COMPLETED
 }
