@@ -12,6 +12,7 @@
         <module>scheduling</module>
         <module>notification</module>
         <module>history</module>
+        <module>user</module>
     </modules>
 
     <properties>

@@ -1,0 +1,10 @@
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /build
+COPY . .
+RUN mvn -pl user -am clean package spring-boot:repackage -DskipTests
+
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=build /build/user/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]

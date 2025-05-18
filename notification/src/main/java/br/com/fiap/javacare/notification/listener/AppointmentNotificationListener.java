@@ -12,7 +12,6 @@ public class AppointmentNotificationListener {
     @RabbitListener(queues = "appointment-notification-queue")
     public void receive(AppointmentNotificationDTO dto) {
         log.info("Notificação recebida: {}", dto);
-        // Simular envio de e-mail ou log
     }
 
 }

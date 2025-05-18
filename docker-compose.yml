@@ -65,6 +65,18 @@ services:
     networks:
       - javacare-net
 
+  user:
+    build:
+      context: .
+      dockerfile: Dockerfile.user
+    container_name: javacare-user
+    depends_on:
+      - postgres
+    ports:
+      - "8083:8083"
+    networks:
+      - javacare-net
+
 volumes:
   postgres_data:
 
