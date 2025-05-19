@@ -6,7 +6,7 @@ spring:
     name: scheduling-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/javacare
+    url: jdbc:postgresql://postgres:5432/javacare?currentSchema=scheduling
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -18,9 +18,19 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_schema: scheduling
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    defaultSchema: scheduling
 
   rabbitmq:
     host: rabbitmq
     port: 5672
     username: guest
     password: guest
+
+services:
+  user:
+    url: http://user:8083

@@ -1,6 +1,5 @@
-package main.java.br.com.fiap.javacare.user.model;
+package br.com.fiap.javacare.user.model;
 
-import br.com.fiap.javacare.user.model.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

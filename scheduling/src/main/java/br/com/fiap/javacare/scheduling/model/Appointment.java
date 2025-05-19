@@ -18,7 +18,7 @@ public class Appointment {
 
     private UUID patientId;
 
-    private UUID doctorId;
+    private UUID userId;
 
     private LocalDateTime appointmentDateTime;
 

@@ -1,12 +1,16 @@
+type Query {
+    healthCheck: String!
+}
+
 type Mutation {
     createAppointment(input: AppointmentInputDTO!): Appointment,
     updateAppointment(input: AppointmentInputDTO!): Appointment!,
-    cancelAppointment(id: ID!): Appointment
+    cancelAppointment(id: ID!, userId: ID!): Appointment
 }
 
 input AppointmentInputDTO {
     patientId: ID!
-    doctorId: ID!
+    userId: ID!
     appointmentDateTime: String!
     status: String!
 }
@@ -14,7 +18,7 @@ input AppointmentInputDTO {
 type Appointment {
     id: ID!
     patientId: ID!
-    doctorId: ID!
+    userId: ID!
     appointmentDateTime: String!
     status: String!
 }

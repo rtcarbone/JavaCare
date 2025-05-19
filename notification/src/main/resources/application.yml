@@ -10,3 +10,20 @@ spring:
     port: 5672
     username: guest
     password: guest
+
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 69316d9a01b5ed
+    password: 0d3d83b2ab7c5e
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+services:
+  user:
+    url: http://user:8083

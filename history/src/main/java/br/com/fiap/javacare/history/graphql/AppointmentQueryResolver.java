@@ -1,8 +1,11 @@
 package br.com.fiap.javacare.history.graphql;
 
+import br.com.fiap.javacare.history.model.ActionType;
 import br.com.fiap.javacare.history.model.Appointment;
 import br.com.fiap.javacare.history.model.AppointmentStatus;
 import br.com.fiap.javacare.history.repository.AppointmentRepository;
+import br.com.fiap.javacare.history.service.UserServiceClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
@@ -13,33 +16,51 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class AppointmentQueryResolver {
 
     private final AppointmentRepository repository;
-
-    public AppointmentQueryResolver(AppointmentRepository repository) {
-        this.repository = repository;
-    }
+    private final UserServiceClient userServiceClient;
 
     @QueryMapping
-    public List<Appointment> appointments(@Argument UUID patientId,
+    public List<Appointment> appointments(@Argument UUID userId,
+                                          @Argument UUID patientId,
                                           @Argument UUID doctorId,
                                           @Argument AppointmentStatus status) {
+
+        boolean allowed = userServiceClient.canAccess(
+                userId,
+                null,
+                ActionType.VIEW_HISTORY
+        );
+
         return repository.findAll()
                 .stream()
-                .filter(a -> patientId == null || a.getPatientId()
+                .filter(appointment -> patientId == null || appointment.getPatientId()
                         .equals(patientId))
-                .filter(a -> doctorId == null || a.getDoctorId()
+                .filter(appointment -> doctorId == null || appointment.getUserId()
                         .equals(doctorId))
-                .filter(a -> status == null || a.getStatus()
+                .filter(appointment -> status == null || appointment.getStatus()
                         .equals(status))
                 .toList();
     }
 
     @QueryMapping
-    public Appointment getAppointmentById(@Argument UUID id) {
-        return repository.findById(id)
+    public Appointment getAppointmentById(@Argument UUID id,
+                                          @Argument UUID userId) {
+        Appointment appointment = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found"));
-    }
 
+        boolean allowed = userServiceClient.canAccess(
+                userId,
+                appointment.getPatientId(),
+                ActionType.VIEW_HISTORY
+        );
+
+        if (!allowed) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
+        }
+
+        return appointment;
+    }
 }

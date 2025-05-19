@@ -2,9 +2,10 @@ type Query {
     appointments(
         patientId: ID
         doctorId: ID
-        status: AppointmentStatus
+        status: AppointmentStatus,
+        userId: ID!
     ): [Appointment]
-    getAppointmentById(id: ID!): Appointment
+    getAppointmentById(id: ID!, userId: ID!): Appointment
 }
 
 type Appointment {

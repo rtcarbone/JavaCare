@@ -1,0 +1,28 @@
+type Query {
+    users: [UserResponseDTO!]!
+    userById(id: ID!): UserResponseDTO
+    userByEmail(email: String!): UserResponseDTO
+}
+
+type Mutation {
+    createUser(input: UserInputDTO!): UserResponseDTO!
+}
+
+enum UserType {
+    MEDIC
+    NURSE
+    PATIENT
+}
+
+input UserInputDTO {
+    fullName: String!
+    email: String!
+    type: UserType!
+}
+
+type UserResponseDTO {
+    id: ID!
+    fullName: String!
+    email: String!
+    type: UserType!
+}
