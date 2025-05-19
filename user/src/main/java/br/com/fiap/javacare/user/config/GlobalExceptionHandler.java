@@ -1,5 +1,6 @@
 package br.com.fiap.javacare.user.config;
 
+import br.com.fiap.javacare.user.exception.UserNotFoundException;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.schema.DataFetchingEnvironment;
@@ -10,16 +11,23 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @Component
 @Slf4j
 public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter {
 
+    private static final List<Class<? extends Throwable>> notFoundExceptions = List.of(
+            EntityNotFoundException.class,
+            UserNotFoundException.class
+    );
+
     @Override
     protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
         log.error("Exception handled: {}", ex.getMessage(), ex);
 
-        if (ex instanceof EntityNotFoundException) {
+        if (notFoundExceptions.stream()
+                .anyMatch(e -> e.isInstance(ex))) {
             return toGraphQLError("Not Found", ex, env);
         }
 

@@ -30,15 +30,19 @@ public class AppointmentQueryResolver {
 
         boolean allowed = userServiceClient.canAccess(
                 userId,
-                null,
+                patientId,
                 ActionType.VIEW_HISTORY
         );
+
+        if (!allowed) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
+        }
 
         return repository.findAll()
                 .stream()
                 .filter(appointment -> patientId == null || appointment.getPatientId()
                         .equals(patientId))
-                .filter(appointment -> doctorId == null || appointment.getUserId()
+                .filter(appointment -> doctorId == null || appointment.getDoctorId()
                         .equals(doctorId))
                 .filter(appointment -> status == null || appointment.getStatus()
                         .equals(status))

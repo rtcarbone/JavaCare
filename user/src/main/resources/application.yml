@@ -6,7 +6,7 @@ spring:
     name: user-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/javacare
+    url: jdbc:postgresql://postgres:5432/javacare?currentSchema=users
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -18,10 +18,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_schema: users
 
   flyway:
     enabled: true
     locations: classpath:db/migration
+    defaultSchema: users
 
 graphql:
   path: /graphql

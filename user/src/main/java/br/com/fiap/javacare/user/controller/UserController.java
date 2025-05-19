@@ -1,6 +1,7 @@
 package br.com.fiap.javacare.user.controller;
 
 import br.com.fiap.javacare.user.dto.UserResponseDTO;
+import br.com.fiap.javacare.user.exception.UserNotFoundException;
 import br.com.fiap.javacare.user.mapper.UserMapper;
 import br.com.fiap.javacare.user.model.ActionType;
 import br.com.fiap.javacare.user.model.User;
@@ -25,7 +26,7 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(repository.findById(id)
                                          .map(mapper::toDto)
-                                         .orElseThrow(() -> new RuntimeException("User not found")));
+                                         .orElseThrow(() -> new UserNotFoundException("User not found")));
     }
 
     @GetMapping("/{id}/can-access")
@@ -35,7 +36,7 @@ public class UserController {
             @RequestParam ActionType action
     ) {
         User requester = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Requester not found"));
+                .orElseThrow(() -> new UserNotFoundException("Requester not found"));
 
         boolean result = switch (action) {
             case VIEW_HISTORY -> AccessControlUtil.canViewHistory(requester, targetUserId);

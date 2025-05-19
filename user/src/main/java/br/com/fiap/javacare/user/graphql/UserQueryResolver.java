@@ -1,6 +1,7 @@
 package br.com.fiap.javacare.user.graphql;
 
 import br.com.fiap.javacare.user.dto.UserResponseDTO;
+import br.com.fiap.javacare.user.exception.UserNotFoundException;
 import br.com.fiap.javacare.user.mapper.UserMapper;
 import br.com.fiap.javacare.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +31,14 @@ public class UserQueryResolver {
     public UserResponseDTO userById(@Argument UUID id) {
         return repository.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     @QueryMapping
     public UserResponseDTO userByEmail(@Argument String email) {
         return repository.findByEmail(email)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
+
 }
