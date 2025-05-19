@@ -12,11 +12,10 @@ spring:
     password: guest
 
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    username: 69316d9a01b5ed
-    password: 0d3d83b2ab7c5e
-    protocol: smtp
+    host: smtp.gmail.com
+    port: 587
+    username: javacare.tech.challenge.fiap@gmail.com
+    password: ZUVFWOKQAWOZIEQH
     properties:
       mail:
         smtp:
