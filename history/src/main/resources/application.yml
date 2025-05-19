@@ -18,3 +18,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+services:
+  user:
+    url: http://user:8083

@@ -1,4 +1,4 @@
-package br.com.fiap.javacare.notification.dto;
+package br.com.fiap.javacare.notification.model;
 
 public enum UserType {
     MEDIC,

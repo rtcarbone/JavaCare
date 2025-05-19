@@ -10,15 +10,16 @@ type Mutation {
 
 input AppointmentInputDTO {
     patientId: ID!
-    userId: ID!
+    doctorId: ID!
     appointmentDateTime: String!
     status: String!
+    userId: ID!
 }
 
 type Appointment {
     id: ID!
     patientId: ID!
-    userId: ID!
+    doctorId: ID!
     appointmentDateTime: String!
     status: String!
 }
