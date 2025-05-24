@@ -19,19 +19,14 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
     protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
         log.error("Exception handled: {}", ex.getMessage(), ex);
 
-        if (ex instanceof EntityNotFoundException) {
-            return toGraphQLError("Not Found", ex, env);
-        }
+        return switch (ex) {
+            case EntityNotFoundException entityNotFoundException -> toGraphQLError("Not Found", ex, env);
+            case AccessDeniedException accessDeniedException -> toGraphQLError("Access Denied", ex, env);
+            case ResponseStatusException responseStatusException ->
+                    toGraphQLError("Error: " + responseStatusException.getReason(), ex, env);
+            default -> toGraphQLError("Internal Server Error", ex, env);
+        };
 
-        if (ex instanceof AccessDeniedException) {
-            return toGraphQLError("Access Denied", ex, env);
-        }
-
-        if (ex instanceof ResponseStatusException) {
-            return toGraphQLError("Error: " + ((ResponseStatusException) ex).getReason(), ex, env);
-        }
-
-        return toGraphQLError("Internal Server Error", ex, env);
     }
 
     private GraphQLError toGraphQLError(String message, Throwable ex, DataFetchingEnvironment env) {
